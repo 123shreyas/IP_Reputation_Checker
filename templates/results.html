@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reputation Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Reputation Results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Value</th>
+                    <th>Malicious</th>
+                    <th>Reputation</th>
+                    <th>Votes</th>
+                    <th>ISP / Filename</th>
+                    <th>Country / File Type</th>
+                    <th>Network</th>
+                    <th>WHOIS</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in results %}
+                <tr>
+                    <td>{{ item.type }}</td>
+                    <td>{{ item.value }}</td>
+                    <td>{{ item.malicious }}</td>
+                    <td>
+                        {% if item.reputation != 'N/A' %}
+                            {% if item.reputation | int > 0 %}
+                                <span style="color: green; font-weight: bold;">{{ item.reputation }}</span>
+                            {% elif item.reputation | int < 0 %}
+                                <span style="color: red; font-weight: bold;">{{ item.reputation }}</span>
+                            {% else %}
+                                <span style="color: gray;">{{ item.reputation }}</span>
+                            {% endif %}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>                  
+                    <td>
+                        {% if item.votes %}
+                            <span style="color: green; font-weight: bold;">Harmless:</span>
+                            {{ item.votes.harmless if item.votes.harmless is not none else 0 }}<br>
+                            <span style="color: red; font-weight: bold;">Malicious:</span>
+                            {{ item.votes.malicious if item.votes.malicious is not none else 0 }}
+                        {% else %}
+                            <span style="color: gray;">N/A</span>
+                        {% endif %}
+                    </td>
+                    
+                    {% if item.type == "IP" %}
+                        <td>{{ item.isp }}</td>
+                        <td>{{ item.country }}</td>
+                        <td>{{ item.network }}</td>
+                        <td>{{ item.whois }}</td>
+                    {% else %}
+                        <td>{{ item.filename }}</td>
+                        <td>{{ item.file_type }}</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/">Back</a>
+        <a href="/download-excel" class="button">Download Excel</a>
+<a href="/download-pdf" class="button" style="margin-left: 10px;">Download PDF</a>
+
+    </div>
+</body>
+</html>

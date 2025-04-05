@@ -1,0 +1,19 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hash Reputation Check</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Check File Hash Reputation</h2>
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".txt" required>
+            <button type="submit">Check</button>
+        </form>
+        <a href="/">Back</a>
+    </div>
+</body>
+</html>

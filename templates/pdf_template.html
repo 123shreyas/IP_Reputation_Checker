@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10pt;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            word-wrap: break-word;
+        }
+        th, td {
+            border: 1px solid #444;
+            padding: 6px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        /* Optional: Set specific column widths (adjust as needed) */
+        td:nth-child(1), th:nth-child(1) { width: 6%; }   /* Type */
+        td:nth-child(2), th:nth-child(2) { width: 16%; }  /* Value */
+        td:nth-child(3), th:nth-child(3) { width: 6%; }   /* Malicious */
+        td:nth-child(4), th:nth-child(4) { width: 8%; }   /* Reputation */
+        td:nth-child(5), th:nth-child(5) { width: 10%; }  /* Harmless Votes */
+        td:nth-child(6), th:nth-child(6) { width: 10%; }  /* Malicious Votes */
+        td:nth-child(7), th:nth-child(7) { width: 10%; }  /* ISP / Filename */
+        td:nth-child(8), th:nth-child(8) { width: 8%; }   /* Country / File Type */
+        td:nth-child(9), th:nth-child(9) { width: 10%; }  /* Network */
+        td:nth-child(10), th:nth-child(10) { width: 16%; } /* WHOIS / File Info */
+    </style>
+</head>
+<body>
+    <h2>Reputation Results</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Value</th>
+                <th>Malicious</th>
+                <th>Reputation</th>
+                <th>Harmless Votes</th>
+                <th>Malicious Votes</th>
+                <th>ISP / Filename</th>
+                <th>Country / File Type</th>
+                <th>Network</th>
+                <th>WHOIS / File Info</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in results %}
+            <tr>
+                <td>{{ item.type }}</td>
+                <td style="word-break: break-all;">{{ item.value }}</td>
+                <td>{{ item.malicious }}</td>
+                <td>{{ item.reputation }}</td>
+                <td>{{ item.votes.harmless if item.votes else 'N/A' }}</td>
+                <td>{{ item.votes.malicious if item.votes else 'N/A' }}</td>
+                {% if item.type == "IP" %}
+                    <td>{{ item.isp }}</td>
+                    <td>{{ item.country }}</td>
+                    <td>{{ item.network }}</td>
+                    <td>{{ item.whois }}</td>
+                {% else %}
+                    <td>{{ item.filename }}</td>
+                    <td>{{ item.file_type }}</td>
+                    <td>N/A</td>
+                    <td>{{ item.filename or 'N/A' }}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
